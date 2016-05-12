@@ -10,6 +10,15 @@ module.exports = function(io) {
 			});
 		});
 
+		socket.on('signin', function(data) {
+			Controller.AuthController.Signin(data, function(err, result) {
+				if (err) {
+					return socket.emit('action_err', err);
+				}
+				return socket.emit('res_token', result);
+			});
+		});
+
 		socket.on('reminder', function(data) {
 			Controller.AuthController.Reminder(data, function(err, result) {
 				if (err) {

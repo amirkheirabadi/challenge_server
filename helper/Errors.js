@@ -7,12 +7,6 @@ module.exports = {
 
 	CoinNotEnough: 1008,
 
-	UserNotExists: 1001,
-	UserExists: 1002,
-	UserNotCreate: 1003,
-
-
-
 	// Token Error
 	TokenMiss: 5000,
 	TokenNotInRedis: 5001,
