@@ -1,0 +1,129 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('new:server');
+var http = require('http');
+var models = require("../models");
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+
+/**
+ *  Init sequelize
+ */
+
+models.sequelize.sync().then(function() {
+  server.listen(port);
+  var setting = require('../helper/Setting.js');
+  var err = require('../helper/Errors.js');
+  var redis_fun = require('../helper/Redis.js');
+  var io = require('socket.io').listen(server);
+  var router = require('socket.io-events')();
+  router.on('*', function(socket, args, next) {
+    if (typeof args[1] != "object") {
+      return socket.emit('data_error', err.InvalidInput);
+    }
+    var allow = setting.CONNECTION_ALLOW;
+    if (allow.indexOf(args[0]) != -1) {
+      return next();
+    }
+    if ("token" in args[1]) {
+      redis_fun.FindToken(args[1].token, function(error, user) {
+        if (error) {
+          return socket.emit('token_error', error)
+        }
+        args[1].user = user;
+        return next();
+      });
+    } else {
+      return socket.emit('token_error', err.TokenMiss);
+    }
+  });
+  io.use(router);
+  require('../socket')(io);
+
+});
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
