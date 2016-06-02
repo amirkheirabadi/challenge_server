@@ -29,14 +29,23 @@ module.exports = function(io) {
 		});
 
 		// Challenge
-		socket.on('challenge_list', function(data) {
-			Controller.ChallengeController.list(data, function(err, result) {
+		socket.on('my_text', function(data) {
+			Controller.ChallengeController.myText(data, function(err, result) {
 				if (err) {
 					return socket.emit('action_err', err);
 				}
-				return socket.emit('res_list', result);
+				return socket.emit('res_text_list', result);
 			});
 		});
+
+		// socket.on('show_text', function(data) {
+		// 	Controller.ChallengeController.show_text(data, function(err, result) {
+		// 		if (err) {
+		// 			return socket.emit('action_err', err);
+		// 		}
+		// 		return socket.emit('res_list', result);
+		// 	});
+		// });
 
 		socket.on('challenge_create', function(data) {
 			Controller.ChallengeController.create(data, function(err, result) {
