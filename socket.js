@@ -28,6 +28,24 @@ module.exports = function(io) {
 			});
 		});
 
+		socket.on('reminder_check', function(data) {
+			Controller.AuthController.ReminderCheck(data, function(err, result) {
+				if (err) {
+					return socket.emit('action_err', err);
+				}
+				return socket.emit('res_reminder', result);
+			});
+		});
+
+		socket.on('reminder_accepted', function(data) {
+			Controller.AuthController.ReminderAccepted(data, function(err, result) {
+				if (err) {
+					return socket.emit('action_err', err);
+				}
+				return socket.emit('res_reminder', result);
+			});
+		});
+
 		// Challenge
 		socket.on('my_text', function(data) {
 			Controller.ChallengeController.myText(data, function(err, result) {

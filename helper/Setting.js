@@ -1,6 +1,6 @@
 module.exports = {
 
-	CONNECTION_ALLOW: ['signup','signin'],
+	CONNECTION_ALLOW: ['signup','signin','reminder','reminder_check','reminder_accepted'],
 
 	//Redis DataBase
 	REDIS_SETTING: 3,
