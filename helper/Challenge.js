@@ -23,7 +23,7 @@ module.exports = {
 	},
 
 	SettingGet: function(name, callback) {
-		redis.SELECT(setting.REDIS_SETTING);
+		redis.SELECT(Helper.Setting.REDIS_SETTING);
 		redis.GET('setting_' + name, function(err, value) {
 			return callback(value);
 		});

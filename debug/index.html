@@ -121,17 +121,22 @@ body {
       console.log('res_token',data);
   });
 
-<<<<<<< Updated upstream
-  socket.on('res_token',function (data) {
-      console.log('res_text_list',data);
-=======
+
   socket.on('res_reminder',function (data) {
       console.log('res_token',data);
   });
 
+
   socket.on('res_reminder_check',function (data) {
       console.log('res_token',data);
->>>>>>> Stashed changes
+  });
+
+  socket.on('res_text_list',function (data) {
+      console.log('res_text_list',data);
+  });
+
+  socket.on('res_create',function (data) {
+      console.log('res_create',data);
   });
 </script>
 </body>

@@ -50,7 +50,7 @@ module.exports = {
 			});
 		});
 	},
-
+	
 	// Token
 	FindToken: function(token, callback) {
 		redis.SELECT(Helper.Setting.REDIS_USER);

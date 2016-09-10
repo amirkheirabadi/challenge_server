@@ -48,10 +48,11 @@ module.exports = function(io) {
 
 		// Challenge
 		socket.on('my_text', function(data) {
-			Controller.ChallengeController.myText(data, function(err, result) {
+			Controller.ChallengeController.MyText(data, function(err, result) {
 				if (err) {
 					return socket.emit('action_err', err);
 				}
+				console.log(result);
 				return socket.emit('res_text_list', result);
 			});
 		});
@@ -66,7 +67,7 @@ module.exports = function(io) {
 		// });
 
 		socket.on('challenge_create', function(data) {
-			Controller.ChallengeController.create(data, function(err, result) {
+			Controller.ChallengeController.CreateText(data, function(err, result) {
 				if (err) {
 					return socket.emit('action_err', err);
 				}
@@ -74,13 +75,13 @@ module.exports = function(io) {
 			});
 		});
 
-		socket.on('challenge_edit', function(data) {
-			Controller.ChallengeController.update(data, function(err, result) {
-				if (err) {
-					return socket.emit('action_err', err);
-				}
-				return socket.emit('res_create', result);
-			});
-		});
+		// socket.on('challenge_edit', function(data) {
+		// 	Controller.ChallengeController.update(data, function(err, result) {
+		// 		if (err) {
+		// 			return socket.emit('action_err', err);
+		// 		}
+		// 		return socket.emit('res_create', result);
+		// 	});
+		// });
 	});
 }

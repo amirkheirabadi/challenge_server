@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 module.exports = {
-	my_text : function (data,callback) {
+	MyText : function (data,callback) {
 		var query = {
 			where :{
 				text_owner: data.user.user_id,
@@ -58,33 +58,37 @@ module.exports = {
 	// 	});
 	// },
 
-
-	// create_text: function(data, callback) {
-	// 	var amounr_for_create_challenge = Helper.Challenge.SettingGet('conin_for_challenge_create');
-	// 	Helper.User.SubCoin(data.user.user_id, amounr_for_create_challenge, function(err) {
-	// 		if (err) {
-	// 			return callback(err, null);
-	// 		}
-	// 		Model.text.create({
-	// 			text_owner: data.user.user_id,
-	// 			text_question: data.question,
-	// 			text_description: data.description,
-	// 			text_answer: data.answer,
-	// 			text_categoty: data.category,
-	// 			text_level: 1,
-	// 			text_coin: amounr_for_create_challenge,
-	// 			text_status: data.status,
-	// 		}).then(function(text) {
-	// 			return callback(null, {
-	// 				text_id: text.get('text_id'),
-	// 				text_question: text.get('text_question'),
-	// 				text_level: text.get('text_level'),
-	// 				text_coin: text.get('text_coin'),
-	// 			})
-	// 		});
-	// 	});
-	// },
 	//
+	CreateText: function(data, callback) {
+		console.log('sdfsd');
+		 Helper.Challenge.SettingGet('conin_for_challenge_create',function (val) {
+			var amounr_for_create_challenge = val;
+			Helper.User.SubCoin(data.user.user_id, amounr_for_create_challenge, function(err) {
+				if (err) {
+					return callback(err, null);
+				}
+				Model.text.create({
+					text_owner: data.user.user_id,
+					text_question: data.question,
+					text_description: data.description,
+					text_answer: data.answer,
+					text_categoty: data.category,
+					text_level: 1,
+					text_coin: amounr_for_create_challenge,
+					text_status: data.status,
+				}).then(function(text) {
+					return callback(null, {
+						text_id: text.get('text_id'),
+						text_question: text.get('text_question'),
+						text_level: text.get('text_level'),
+						text_coin: text.get('text_coin'),
+					})
+				});
+			});
+		});
+
+	},
+
 	// show_text : function (data,callback) {
 	// 	var query = {
 	// 		where :{
